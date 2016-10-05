@@ -8,13 +8,20 @@ function getServer(server, state) {
   return server;
 }
 
+export var actions = {
+  graphAction: null,
+  graphReady: null,
+  graphDone: null,
+  graphError: null,
+};
+
 function config({
   server,
   fetch,
   action: graphAction = 'GRAPH',
-  ready: graphReady,
-  done: graphDone,
-  error: graphError,
+  ready: graphReady = 'GRAPH_READY',
+  done: graphDone = 'GRAPH_DONE',
+  error: graphError = 'GRAPH_ERROR',
   getHeaders = _.noop,
   getOptions = _.noop,
   getVariables = _.noop,
@@ -25,6 +32,14 @@ function config({
   if (fetch === undefined) {
     throw '[GraphQL middleware] \'fetch\' is required';
   }
+
+  actions = {
+    ...actions,
+    graphAction,
+    graphReady,
+    graphDone,
+    graphError,
+  };
 
   return store => {
     return (next) => {
